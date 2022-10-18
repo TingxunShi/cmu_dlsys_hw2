@@ -159,11 +159,11 @@ class BatchNorm1d(Module):
         if self.training:
             n, k = x.shape
             mean = x.sum(axes=(0, )) / n
-            self.running_mean.cached_data = ((1 - self.momentum) * self.running_mean + self.momentum * mean).numpy()
+            self.running_mean.data = ((1 - self.momentum) * self.running_mean + self.momentum * mean).data
             mean = mean.reshape((1, self.dim)).broadcast_to(x.shape)
 
             var = ((x - mean) ** 2).sum(axes=(0, )) / n
-            self.running_var.cached_data = ((1 - self.momentum) * self.running_var + self.momentum * var).numpy()
+            self.running_var.data = ((1 - self.momentum) * self.running_var + self.momentum * var).data
             var = var.reshape((1, self.dim)).broadcast_to(x.shape)
         else:
             mean = self.running_mean.reshape((1, self.dim)).broadcast_to(x.shape)
